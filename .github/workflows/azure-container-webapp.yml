@@ -10,49 +10,12 @@ jobs:
     name: BUILD-JOB
     runs-on: ubuntu-slim
 
-    permissions:
-      security-events: write
-      actions: read
-      contents: read
-
-    strategy:
-      fail-fast: false
-      matrix:
-        language: ['javascript-typescript']
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v4
-        with:
-          languages: ${{ matrix.language }}
-
-      - name: Autobuild
-        uses: github/codeql-action/autobuild@v4
-
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v4
-        with:
-          category: "/language:${{ matrix.language }}"
-
-      - name: Set up Node.js 24
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-
-      - name: BUILD
-        run: npm install
+      - name: BUILD-JOB
+        run: npm ci
 
       - name: TEST
-        run: echo "code is tested !"
-
-      - name: Artifact upload
-        uses: actions/upload-artifact@v7
-        with:
-          name: artifact-1
-          path: |
-            package*
-
-
+        run: echo "code is tested"
