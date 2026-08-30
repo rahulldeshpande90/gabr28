@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: BUILD-JOB
-        run: npm ci
+        run: npm install
 
       - name: TEST
         run: echo "code is tested"
