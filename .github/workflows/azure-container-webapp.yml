@@ -19,3 +19,10 @@ jobs:
 
       - name: TEST
         run: echo "code is tested"
+
+      - name: Artifact upload
+        uses: actions/upload-artifact@v7
+        with:
+          name: artifact-1
+          path: |
+            package*	  
