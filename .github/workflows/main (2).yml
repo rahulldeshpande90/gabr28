@@ -45,3 +45,10 @@ jobs:
       # Run tests
       - name: Test
         run: npm test
+
+      - name: deploy
+        run: echo "deployment is done"
+
+      - name: rollback
+        if: failure()
+        run: echo "rollback is done"
