@@ -47,7 +47,7 @@ jobs:
         run: npm test
 
       - name: deploy
-        run: ech0 "deployment is done"
+        run: echo "deployment is done"
 
       - name: rollback
         if: failure()
