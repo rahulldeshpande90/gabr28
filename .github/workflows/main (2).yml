@@ -1,4 +1,3 @@
-
 name: Node.js CI with Cache
 
 on:
@@ -20,10 +19,20 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v6
 
+      # Setup Node.js 24
       - name: Set up Node.js 24
         uses: actions/setup-node@v4
         with:
-          node-version: '24'	
+          node-version: '24'
+
+      # Cache Node Modules
+      - name: Cache Node Modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
       # Install dependencies
       - name: Install Dependencies
