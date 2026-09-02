@@ -4,15 +4,15 @@ on:
   push:
     branches:
       - master
+      - main
 
-  pull_request:
-    branches:
-      - master
+ 
 
 jobs:
   build:
     name: BUILD-JOB
-    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+    runs-on: ubuntu-slim
 
     steps:
       # Checkout source code
