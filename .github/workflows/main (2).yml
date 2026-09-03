@@ -1,63 +1,71 @@
-name: Node.js CI with Cache
+name: Node.js Parallel Build
 
 on:
   push:
     branches:
-      - master
       - main
-
- 
+      - master
 
 jobs:
+
   build:
     name: BUILD-JOB
-    if: github.ref == 'refs/heads/master' && github.event_name == 'push'
-    
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-        node-version: [18, 20, 22]
-        language: ['javascript-typescript']
-        
-    
-    
+    runs-on: ubuntu-latest
 
     steps:
-      # Checkout source code
       - name: Checkout Code
         uses: actions/checkout@v6
 
-      # Setup Node.js 24
-      - name: Set up Node.js 24
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '24'
+          node-version: '22'
+          cache: npm
 
-      # Cache Node Modules
-      - name: Cache Node Modules
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      # Install dependencies
       - name: Install Dependencies
-        run: npm install
+        run: npm ci
 
-      # Build application
       - name: Build
         run: npm run build --if-present
 
-      # Run tests
+
+  test:
+    name: TEST-JOB
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install Dependencies
+        run: npm ci
+
       - name: Test
         run: npm test
 
-      - name: deploy
-        run: echo "deployment is done"
 
-      - name: rollback
-        if: failure()
-        run: echo "rollback is done"
+  security:
+    name: SECURITY-JOB
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Security Audit
+        run: npm audit --audit-level=high
