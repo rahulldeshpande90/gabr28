@@ -98,4 +98,4 @@ jobs:
       - name: Install Dependencies
         run: npm install
       - name: deploy
-        run: ech0 "deployment done"
+        run: echo "deployment done"
